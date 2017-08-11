@@ -1,0 +1,5 @@
+input/
+caffe_models/caffe_model_1/*.png
+caffe_models/caffe_model_1/*.log
+caffe_models/caffe_model_2/*.png
+caffe_models/caffe_model_2/*.log
