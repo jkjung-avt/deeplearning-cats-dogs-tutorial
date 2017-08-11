@@ -21,7 +21,7 @@ import matplotlib.pylab as plt
 plt.style.use('ggplot')
 
 
-caffe_path = '/home/ubuntu/caffe/'
+caffe_path = '/home/nvidia/caffe/'
 model_log_path = sys.argv[1]
 learning_curve_path = sys.argv[2]
 
@@ -77,6 +77,3 @@ process.wait()
 command = command = 'rm ' + test_log_path
 process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
 process.wait()
-
-
-

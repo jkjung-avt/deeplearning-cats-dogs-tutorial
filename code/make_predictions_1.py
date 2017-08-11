@@ -9,6 +9,12 @@ usage           :python make_predictions_1.py
 python_version  :2.7.11
 '''
 
+'''
+I've modified the code so that it could work with python3 on Jetson TX2.
+Please refer to my blog posts (https://jkjung-avt.github.io/) for more
+details. - JK Jung, 2017-08-11
+'''
+
 import os
 import glob
 import cv2
@@ -45,15 +51,15 @@ Reading mean image, caffe model and its weights
 '''
 #Read mean image
 mean_blob = caffe_pb2.BlobProto()
-with open('/home/ubuntu/deeplearning-cats-dogs-tutorial/input/mean.binaryproto') as f:
+with open('/home/nvidia/project/deeplearning-cats-dogs-tutorial/input/mean.binaryproto') as f:
     mean_blob.ParseFromString(f.read())
 mean_array = np.asarray(mean_blob.data, dtype=np.float32).reshape(
     (mean_blob.channels, mean_blob.height, mean_blob.width))
 
 
 #Read model architecture and trained model's weights
-net = caffe.Net('/home/ubuntu/deeplearning-cats-dogs-tutorial/caffe_models/caffe_model_1/caffenet_deploy_1.prototxt',
-                '/home/ubuntu/deeplearning-cats-dogs-tutorial/caffe_models/caffe_model_1/caffe_model_1_iter_10000.caffemodel',
+net = caffe.Net('/home/nvidia/project/deeplearning-cats-dogs-tutorial/caffe_models/caffe_model_1/caffenet_deploy_1.prototxt',
+                '/home/nvidia/project/deeplearning-cats-dogs-tutorial/caffe_models/caffe_model_1/caffe_model_1_iter_10000.caffemodel',
                 caffe.TEST)
 
 #Define image transformers
@@ -81,9 +87,9 @@ for img_path in test_img_paths:
     test_ids = test_ids + [img_path.split('/')[-1][:-4]]
     preds = preds + [pred_probas.argmax()]
 
-    print img_path
-    print pred_probas.argmax()
-    print '-------'
+    print(img_path)
+    print(pred_probas.argmax())
+    print('-------')
 
 '''
 Making submission file
