@@ -9,6 +9,12 @@ usage           :python create_lmdb.py
 python_version  :2.7.11
 '''
 
+'''
+I've modified the code so that it could work with python3 on Jetson TX2.
+Please refer to my blog posts (https://jkjung-avt.github.io/) for more
+details. - JK Jung, 2017-08-11
+'''
+
 import os
 import glob
 import random
@@ -46,8 +52,8 @@ def make_datum(img, label):
         label=label,
         data=np.rollaxis(img, 2).tostring())
 
-train_lmdb = '/home/ubuntu/deeplearning-cats-dogs-tutorial/input/train_lmdb'
-validation_lmdb = '/home/ubuntu/deeplearning-cats-dogs-tutorial/input/validation_lmdb'
+train_lmdb = '/home/nvidia/project/deeplearning-cats-dogs-tutorial/input/train_lmdb'
+validation_lmdb = '/home/nvidia/project/deeplearning-cats-dogs-tutorial/input/validation_lmdb'
 
 os.system('rm -rf  ' + train_lmdb)
 os.system('rm -rf  ' + validation_lmdb)
@@ -59,9 +65,9 @@ test_data = [img for img in glob.glob("../input/test1/*jpg")]
 #Shuffle train_data
 random.shuffle(train_data)
 
-print 'Creating train_lmdb'
+print('Creating train_lmdb')
 
-in_db = lmdb.open(train_lmdb, map_size=int(1e12))
+in_db = lmdb.open(train_lmdb, map_size=int(25000*3*227*227*2))
 with in_db.begin(write=True) as in_txn:
     for in_idx, img_path in enumerate(train_data):
         if in_idx %  6 == 0:
@@ -73,14 +79,14 @@ with in_db.begin(write=True) as in_txn:
         else:
             label = 1
         datum = make_datum(img, label)
-        in_txn.put('{:0>5d}'.format(in_idx), datum.SerializeToString())
-        print '{:0>5d}'.format(in_idx) + ':' + img_path
+        in_txn.put('{:0>5d}'.format(in_idx).encode('ascii'), datum.SerializeToString())
+        print('{:0>5d}'.format(in_idx) + ':' + img_path)
 in_db.close()
 
 
-print '\nCreating validation_lmdb'
+print('\nCreating validation_lmdb')
 
-in_db = lmdb.open(validation_lmdb, map_size=int(1e12))
+in_db = lmdb.open(validation_lmdb, map_size=int(25000*3*227*227*2))
 with in_db.begin(write=True) as in_txn:
     for in_idx, img_path in enumerate(train_data):
         if in_idx % 6 != 0:
@@ -92,8 +98,8 @@ with in_db.begin(write=True) as in_txn:
         else:
             label = 1
         datum = make_datum(img, label)
-        in_txn.put('{:0>5d}'.format(in_idx), datum.SerializeToString())
-        print '{:0>5d}'.format(in_idx) + ':' + img_path
+        in_txn.put('{:0>5d}'.format(in_idx).encode('ascii'), datum.SerializeToString())
+        print('{:0>5d}'.format(in_idx) + ':' + img_path)
 in_db.close()
 
-print '\nFinished processing all images'
+print('\nFinished processing all images')
