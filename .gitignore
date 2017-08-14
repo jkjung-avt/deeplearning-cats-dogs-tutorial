@@ -1,5 +1,12 @@
 input/
 caffe_models/caffe_model_1/*.png
 caffe_models/caffe_model_1/*.log
+caffe_models/caffe_model_1/*.csv
+caffe_models/caffe_model_1/*.caffemodel
+caffe_models/caffe_model_1/*.solverstate
 caffe_models/caffe_model_2/*.png
 caffe_models/caffe_model_2/*.log
+caffe_models/caffe_model_2/*.csv
+caffe_models/caffe_model_2/*.caffemodel
+caffe_models/caffe_model_2/*.solverstate
+caffe_models/bvlc_reference_caffenet/
